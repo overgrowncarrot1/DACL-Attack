@@ -19,6 +19,8 @@ from WriteOwner import WOpassG, WOpassU, WOhashU, WOhashG, whois
 from WriteDACL import WriteDaclPass, WriteDaclHash
 from GenericAll import GenericAllPass, GenericAllHash
 from ForceChange import ForceChangeH, ForceChangeP
+from Enumerate import BLOODUH, BLOODUP, SMBN, SMBUP, SMBUH, LDAPN, LDAPUP, LDAPUH, SSHUP, SSHUH, RDPUP, RDPUH, WMIN, WMIUP,WMIUH, VNCN, VNCUP, VNCUH, FTPN, FTPUP, FTPUH, NFSN, NFSUP, NFSUH, MSSQLUP, MSSQLUH, WINRMUP, WINRMUH
+from dcsync import DCHash, DCPass
 
 # Set colorama color constants
 try:
@@ -51,9 +53,6 @@ def main():
     WriteOwner = args.WriteOwner
     GenericaAll = args.GenericAll
     
-    # Get user choice on writing ownership over group or user
-    who_choice = whois()  # This will prompt the user and store the result
-
     if TargetedKerberoast:
         if HASH:
             HTarg()  # If Pass-the-Hash is used, call HTarg
@@ -79,6 +78,7 @@ def main():
         ForceChangePassword()  # Implement this function based on your needs
 
     if WriteOwner:
+        who_choice = whois()
         if HASH:
             if who_choice == "g":
                 WOhashG(DOMAIN, USER, HASH)
@@ -90,11 +90,45 @@ def main():
             else:
                 WOpassU(DOMAIN, USER, PASS)
     
-    if GenericaAll: 
+    if GenericAll: 
         if HASH:    
-            GenericaAllHash()
+            GenericAllHash()
         else:
-            GenericaAllPass()
+            GenericAllPass()
+
+    if DCSync:
+        if HASH:
+            DCHash()
+        else:
+            DCPass()
+    # Check for the -E flag (Enumerate with Null credentials)
+    if args.Enumerate:
+        print(f"{YELLOW}Enumerating target system on Domain {RED}{DOMAIN}{RESET} with Null credentials")
+        SMBN(DOMAIN)  # SMB with Null credentials
+        LDAPN(DOMAIN)  # LDAP with Null credentials
+        FTPN(DOMAIN)  # FTP with Null credentials
+        WMIN(DOMAIN)  # WMI with Null credentials
+        NFSN(DOMAIN)  # NFS with Null credentials
+        VNCN(DOMAIN)  # VNC with Null credentials
+        if USER and PASS:
+            print(f"{YELLOW}Enumerating target system with username {RED}{USER}{RESET} and password {RED}{PASS}{RESET}")
+            SMBUP(DOMAIN, USER, PASS)
+            LDAPUP(DOMAIN, USER, PASS)
+            FTPUP(DOMAIN, USER, PASS)
+            WMIUP(DOMAIN, USER, PASS)
+            NFSUP(DOMAIN, USER, PASS)
+            VNCUP(DOMAIN, USER, PASS)
+        elif HASH:
+            print(f"{YELLOW}Enumerating target system with username {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
+            SMBUH(DOMAIN, USER, HASH)
+            LDAPUH(DOMAIN, USER, HASH)
+            FTPUH(DOMAIN, USER, HASH)
+            WMIUH(DOMAIN, USER, HASH)
+            NFSUH(DOMAIN, USER, HASH)
+            VNCUH(DOMAIN, USER, HASH)
+        else:
+            print(f"{RED}Error: You need to provide either a username/password or a hash for enumeration!{RESET}")
+            return  # Exit if no valid authentication method is provided
 
 if __name__ == '__main__':
     main()
