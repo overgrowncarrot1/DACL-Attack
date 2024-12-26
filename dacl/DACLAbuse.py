@@ -19,8 +19,9 @@ from WriteOwner import WOpassG, WOpassU, WOhashU, WOhashG, whois
 from WriteDACL import WriteDaclPass, WriteDaclHash
 from GenericAll import GenericAllPass, GenericAllHash
 from ForceChange import ForceChangeH, ForceChangeP
-from Enumerate import BLOODUH, BLOODUP, SMBN, SMBUP, SMBUH, LDAPN, LDAPUP, LDAPUH, SSHUP, SSHUH, RDPUP, RDPUH, WMIN, WMIUP,WMIUH, VNCN, VNCUP, VNCUH, FTPN, FTPUP, FTPUH, NFSN, NFSUP, NFSUH, MSSQLUP, MSSQLUH, WINRMUP, WINRMUH
+from Enumerate import BLOODUH, BLOODUP, SMBN, SMBUP, SMBUH, LDAPN, LDAPUP, LDAPUH, SSHUP, SSHUH, RDPUP, RDPUH, WMIN, WMIUP,WMIUH, VNCN, VNCUP, FTPN, FTPUP, NFSN, NFSUP, MSSQLUP, MSSQLUH, WINRMUP, WINRMUH
 from dcsync import DCHash, DCPass
+from GenericWrite import GWUP, GWGP, GWGH, GWUH
 
 # Set colorama color constants
 try:
@@ -47,12 +48,20 @@ def main():
     HASH = args.PassTheHash
     TargetedKerberoast = args.TargetedKerberoast
     AddMembers = args.AddMembers
-    PasswordAbuse = args.PasswordAbuse
     WriteDacl = args.WriteDacl
     ForceChangePassword = args.ForceChangePassword
     WriteOwner = args.WriteOwner
-    GenericaAll = args.GenericAll
+    GenericAll = args.GenericAll
+    GenericWrite = args.GenericWrite
+    DCSync = args.DCSync
     
+    if GenericWrite:
+        who_choice = whois()
+        if HASH:
+            GWUH();GWGH()
+        else:
+            GWUP();GWGP()
+
     if TargetedKerberoast:
         if HASH:
             HTarg()  # If Pass-the-Hash is used, call HTarg
@@ -64,9 +73,6 @@ def main():
             Ahash()  # If Pass-the-Hash is used, call Ahash
         else:
             Apass()  # Otherwise, call Apass
-
-    if PasswordAbuse:
-        PasswordAbuse()  # Implement this function based on your needs
 
     if WriteDacl:
         if HASH:
@@ -112,6 +118,7 @@ def main():
         VNCN(DOMAIN)  # VNC with Null credentials
         if USER and PASS:
             print(f"{YELLOW}Enumerating target system with username {RED}{USER}{RESET} and password {RED}{PASS}{RESET}")
+            BLOODUP(DOMAIN, USER, PASS)
             SMBUP(DOMAIN, USER, PASS)
             LDAPUP(DOMAIN, USER, PASS)
             FTPUP(DOMAIN, USER, PASS)
@@ -120,12 +127,10 @@ def main():
             VNCUP(DOMAIN, USER, PASS)
         elif HASH:
             print(f"{YELLOW}Enumerating target system with username {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
+            BLOODUH(DOMAIN, USER, HASH)
             SMBUH(DOMAIN, USER, HASH)
             LDAPUH(DOMAIN, USER, HASH)
-            FTPUH(DOMAIN, USER, HASH)
             WMIUH(DOMAIN, USER, HASH)
-            NFSUH(DOMAIN, USER, HASH)
-            VNCUH(DOMAIN, USER, HASH)
         else:
             print(f"{RED}Error: You need to provide either a username/password or a hash for enumeration!{RESET}")
             return  # Exit if no valid authentication method is provided
