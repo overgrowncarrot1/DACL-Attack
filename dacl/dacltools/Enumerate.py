@@ -58,15 +58,15 @@ def SMBUH(DOMAIN, USER, HASH):
 
 def LDAPN(DOMAIN):
     print(f"{YELLOW}Enumerating target system with Null credentials on LDAP{RESET}")
-    subprocess.call([f"nxc ldap {N} {ENUMLDAP} | tee -a Null_LDAP.txt"], shell=True)
+    subprocess.call([f"nxc ldap {DOMAIN} {N} {ENUMLDAP} | tee -a Null_LDAP.txt"], shell=True)
 
 def LDAPUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating LDAP target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc ldap {UP} {ENUMLDAP} | tee -a {USER}_{PASS}_LDAP.txt"], shell=True)
+    subprocess.call([f"nxc ldap {DOMAIN} {UP} {ENUMLDAP} | tee -a {USER}_{PASS}_LDAP.txt"], shell=True)
 
 def LDAPUH(DOMAIN, USER, HASH):
     print(f"{YELLOW}Enumerating LDAP target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc ldap {UH} {ENUMLDAP} | tee -a {USER}_{HASH}_LDAP.txt"], shell=True)
+    subprocess.call([f"nxc ldap {DOMAIN} {UH} {ENUMLDAP} | tee -a {USER}_{HASH}_LDAP.txt"], shell=True)
 
 def NFSN(DOMAIN):
     print(f"{YELLOW}Enumerating target system with Null credentials on NFS{RESET}")
@@ -74,11 +74,7 @@ def NFSN(DOMAIN):
 
 def NFSUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating NFS target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc nfs {UP} {ENUMNFS} | tee -a {USER}_{PASS}_NFS.txt"], shell=True)
-
-def NFSUH(DOMAIN, USER, HASH):
-    print(f"{YELLOW}Enumerating NFS target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc nfs {UH} {ENUMNFS} | tee -a {USER}_{HASH}_NFS.txt"], shell=True)
+    subprocess.call([f"nxc nfs {DOMAIN} {UP} {ENUMNFS} | tee -a {USER}_{PASS}_NFS.txt"], shell=True)
 
 def FTPN(DOMAIN):
     print(f"{YELLOW}Enumerating target system with Null credentials on FTP{RESET}")
@@ -86,11 +82,7 @@ def FTPN(DOMAIN):
 
 def FTPUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating FTP target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc ftp {UP} {ENUMFTP} | tee -a {USER}_{PASS}_FTP.txt"], shell=True)
-
-def FTPUH(DOMAIN, USER, HASH):
-    print(f"{YELLOW}Enumerating FTP target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc ftp {UH} {ENUMFTP} | tee -a {USER}_{HASH}_FTP.txt"], shell=True)
+    subprocess.call([f"nxc ftp {DOMAIN} {UP} {ENUMFTP} | tee -a {USER}_{PASS}_FTP.txt"], shell=True)
 
 def VNCN(DOMAIN):
     print(f"{YELLOW}Enumerating target system with Null credentials on VNC{RESET}")
@@ -98,11 +90,7 @@ def VNCN(DOMAIN):
 
 def VNCUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating VNC target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc vnc {UP} {ENUMVNC} | tee -a {USER}_{PASS}_VNC.txt"], shell=True)
-
-def VNCUH(DOMAIN, USER, HASH):
-    print(f"{YELLOW}Enumerating VNC target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc vnc {UH} {ENUMVNC} | tee -a {USER}_{HASH}_VNC.txt"], shell=True)
+    subprocess.call([f"nxc vnc {DOMAIN} {UP} {ENUMVNC} | tee -a {USER}_{PASS}_VNC.txt"], shell=True)
 
 def WMIN(DOMAIN):
     print(f"{YELLOW}Enumerating target system with Null credentials on WMI{RESET}")
@@ -110,47 +98,47 @@ def WMIN(DOMAIN):
 
 def WMIUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating WMI target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc wmi {UP} | tee -a {USER}_{PASS}_WMI.txt"], shell=True)
+    subprocess.call([f"nxc wmi {DOMAIN} {UP} | tee -a {USER}_{PASS}_WMI.txt"], shell=True)
 
 def WMIUH(DOMAIN, USER, HASH):
     print(f"{YELLOW}Enumerating WMI target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc wmi {UH} | tee -a {USER}_{HASH}_WMI.txt"], shell=True)
+    subprocess.call([f"nxc wmi {DOMAIN} {UH} | tee -a {USER}_{HASH}_WMI.txt"], shell=True)
 
 def SSHUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating SSH target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc SSH {UP} | tee -a {USER}_{PASS}_SSH.txt"], shell=True)
+    subprocess.call([f"nxc SSH {DOMAIN} {UP} | tee -a {USER}_{PASS}_SSH.txt"], shell=True)
 
 def SSHUH(DOMAIN, USER, HASH):
     print(f"{YELLOW}Enumerating SSH target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc ssh {UH} | tee -a {USER}_{HASH}_SSH.txt"], shell=True)
+    subprocess.call([f"nxc ssh {DOMAIN} {UH} | tee -a {USER}_{HASH}_SSH.txt"], shell=True)
 
 def RDPUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating RDP target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc rdp {UP} | tee -a {USER}_{PASS}_RDP.txt"], shell=True)
+    subprocess.call([f"nxc rdp {DOMAIN} {UP} | tee -a {USER}_{PASS}_RDP.txt"], shell=True)
 
 def RDPUH(DOMAIN, USER, HASH):
     print(f"{YELLOW}Enumerating RDP target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-    subprocess.call([f"nxc rdp {UH} | tee -a {USER}_{HASH}_RDP.txt"], shell=True)
+    subprocess.call([f"nxc rdp {DOMAIN} {UH} | tee -a {USER}_{HASH}_RDP.txt"], shell=True)
 
 def MSSQLUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating MSSQL target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
     print(f"{YELLOW}Is using local user you will need to check for yourself{RESET}")
-    subprocess.call([f"nxc mssql {UP} | tee -a {USER}_{PASS}_MSSQL.txt"], shell=True)
+    subprocess.call([f"nxc mssql {DOMAIN} {UP} | tee -a {USER}_{PASS}_MSSQL.txt"], shell=True)
 
 def MSSQLUH(DOMAIN, USER, HASH):
     print(f"{YELLOW}Enumerating MSSQL target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
     print(f"{YELLOW}Is using local user you will need to check for yourself{RESET}")
-    subprocess.call([f"nxc mssql {UH} | tee -a {USER}_{HASH}_MSSQL.txt"], shell=True)
+    subprocess.call([f"nxc mssql {DOMAIN} {UH} | tee -a {USER}_{HASH}_MSSQL.txt"], shell=True)
 
 def WINRMUP(DOMAIN, USER, PASS):
     print(f"{YELLOW}Enumerating WINRM target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
     print(f"{YELLOW}Is using local user you will need to check for yourself{RESET}")
-    subprocess.call([f"nxc winrm {UP} | tee -a {USER}_{PASS}_WINRM.txt"], shell=True)
+    subprocess.call([f"nxc winrm {DOMAIN} {UP} | tee -a {USER}_{PASS}_WINRM.txt"], shell=True)
 
 def WINRMUH(DOMAIN, USER, HASH):
     print(f"{YELLOW}Enumerating WINRM target system on Domain {RED}{DOMAIN}{YELLOW} with user {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
     print(f"{YELLOW}Is using local user you will need to check for yourself{RESET}")
-    subprocess.call([f"nxc winrm {UH} | tee -a {USER}_{HASH}_WINRM.txt"], shell=True)
+    subprocess.call([f"nxc winrm {DOMAIN} {UH} | tee -a {USER}_{HASH}_WINRM.txt"], shell=True)
 
 
 def main():
@@ -169,9 +157,6 @@ def main():
         SMBUH(DOMAIN, USER, HASH)
         LDAPUH(DOMAIN, USER, HASH)
         WMIUH(DOMAIN, USER, HASH)
-        VNCUH(DOMAIN, USER, HASH)
-        FTPUH(DOMAIN, USER, HASH)
-        NFSUH(DOMAIN, USER, HASH)
         MSSQLUH(DOMAIN, USER, HASH)
         WINRMUH(DOMAIN, USER, HASH)
         SSHUH(DOMAIN, USER, HASH)
