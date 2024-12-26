@@ -16,7 +16,7 @@ from argument_parser import parse_arguments  # Import parse_arguments function
 from targetedkerb import Targ, HTarg
 from addmem import Ahash, Apass
 from WriteOwner import WOpassG, WOpassU, WOhashU, WOhashG, whois
-from WriteDACL import WriteDaclPass, WriteDaclHash
+from WriteDACL import WriteDaclPass, WriteDaclHash, WriteDaclPassG, WriteDaclHashG, WriteDaclPassU, WriteDaclHashU
 from GenericAll import GenericAllPass, GenericAllHash
 from ForceChange import ForceChangeH, ForceChangeP
 from Enumerate import BLOODUH, BLOODUP, SMBN, SMBUP, SMBUH, LDAPN, LDAPUP, LDAPUH, SSHUP, SSHUH, RDPUP, RDPUH, WMIN, WMIUP,WMIUH, VNCN, VNCUP, FTPN, FTPUP, NFSN, NFSUP, MSSQLUP, MSSQLUH, WINRMUP, WINRMUH
