@@ -10,10 +10,10 @@ def parse_arguments():
     # Define all the possible actions
     parser.add_argument("-T", "--TargetedKerberoast", action="store_true", help="Targeted Kerberoasting")
     parser.add_argument("-A", "--AddMembers", action="store_true", help="Add Members")
-    parser.add_argument("-P", "--PasswordAbuse", action="store_true", help="Password Abuse")
     parser.add_argument("-W", "--WriteDacl", action="store_true", help="Write DACL")
     parser.add_argument("-F", "--ForceChangePassword", action="store_true", help="Force Change Password")
     parser.add_argument("-G", "--GenericAll", action="store_true", help="Generic All Attack")
+    parser.add_argument("-R", "--GenericWrite", action="store_true", help="Generic Write Attack")
     parser.add_argument("-D", "--DCSync", action="store_true", help="DCSync Attack")
     parser.add_argument("-O", "--WriteOwner", action="store_true", help="Write Owner")
     parser.add_argument("-d", "--DomainName", action="store", help="Domain Name", required=True)
