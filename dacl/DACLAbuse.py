@@ -17,11 +17,12 @@ from targetedkerb import Targ, HTarg
 from addmem import Ahash, Apass
 from WriteOwner import WOpassG, WOpassU, WOhashU, WOhashG, whois
 from WriteDACL import WriteDaclPass, WriteDaclHash, WriteDaclPassG, WriteDaclHashG, WriteDaclPassU, WriteDaclHashU
-from GenericAll import GenericAllPass, GenericAllHash
+from GenericAll import whois, GenericAllPass, GenericAllHash, GenericAllPassC, GenericAllHashC
 from ForceChange import ForceChangeH, ForceChangeP
 from Enumerate import BLOODUH, BLOODUP, SMBN, SMBUP, SMBUH, LDAPN, LDAPUP, LDAPUH, SSHUP, SSHUH, RDPUP, RDPUH, WMIN, WMIUP,WMIUH, VNCN, VNCUP, FTPN, FTPUP, NFSN, NFSUP, MSSQLUP, MSSQLUH, WINRMUP, WINRMUH
 from dcsync import DCHash, DCPass
 from GenericWrite import GWUP, GWGP, GWGH, GWUH
+from AddCredentialLink import ACLH, ACLP
 
 # Set colorama color constants
 try:
@@ -54,6 +55,7 @@ def main():
     GenericAll = args.GenericAll
     GenericWrite = args.GenericWrite
     DCSync = args.DCSync
+    AddCredentialLink = args.AddCredentialLink
     
     if GenericWrite:
         who_choice = whois()
@@ -87,50 +89,74 @@ def main():
         who_choice = whois()
         if HASH:
             if who_choice == "g":
-                WOhashG(DOMAIN, USER, HASH)
+                WOhashG()
             else:
-                WOhashU(DOMAIN, USER, HASH)
+                WOhashU()
         else:
             if who_choice == "g":
-                WOpassG(DOMAIN, USER, PASS)
+                WOpassG()
             else:
-                WOpassU(DOMAIN, USER, PASS)
+                WOpassU()
     
     if GenericAll: 
-        if HASH:    
-            GenericAllHash()
+        # Capture the input from whois function
+        who_choice = whois()  # Get user input and store it in a variable
+    
+        # Check if the user input is valid
+        if who_choice not in ['c', 'u']:
+            print(f"{RED}Invalid input! Please choose 'g' or 'u'.")
+            return  # Exit the program if input is invalid
+    
+        # Execute the appropriate function based on the parsed arguments
+        if HASH:
+            if who_choice == "c":
+                GenericAllHashC()
+            else:
+                GenericAllHash()
         else:
-            GenericAllPass()
+            if who_choice == "c":
+                GenericAllPassC()
+            else:
+                GenericAllPass()  
 
     if DCSync:
         if HASH:
             DCHash()
         else:
             DCPass()
+
+    if AddCredentialLink:
+        if HASH:
+            ACLH()
+        else:
+            ACLP()
+
     # Check for the -E flag (Enumerate with Null credentials)
     if args.Enumerate:
-        print(f"{YELLOW}Enumerating target system on Domain {RED}{DOMAIN}{RESET} with Null credentials")
-        SMBN(DOMAIN)  # SMB with Null credentials
-        LDAPN(DOMAIN)  # LDAP with Null credentials
-        FTPN(DOMAIN)  # FTP with Null credentials
-        WMIN(DOMAIN)  # WMI with Null credentials
-        NFSN(DOMAIN)  # NFS with Null credentials
-        VNCN(DOMAIN)  # VNC with Null credentials
+        if USER == None and PASS == None:
+            print(f"{YELLOW}Enumerating target system on Domain {RED}{DOMAIN}{RESET} with Null credentials")
+            # Call functions that don't require credentials
+            SMBN()
+            LDAPN()
+            FTPN()
+            WMIN()
+            NFSN()
+            VNCN()
         if USER and PASS:
             print(f"{YELLOW}Enumerating target system with username {RED}{USER}{RESET} and password {RED}{PASS}{RESET}")
-            BLOODUP(DOMAIN, USER, PASS)
-            SMBUP(DOMAIN, USER, PASS)
-            LDAPUP(DOMAIN, USER, PASS)
-            FTPUP(DOMAIN, USER, PASS)
-            WMIUP(DOMAIN, USER, PASS)
-            NFSUP(DOMAIN, USER, PASS)
-            VNCUP(DOMAIN, USER, PASS)
-        elif HASH:
+            BLOODUP()
+            SMBUP()
+            LDAPUP()
+            FTPUP()
+            WMIUP()
+            NFSUP()
+            VNCUP()
+        if HASH:
             print(f"{YELLOW}Enumerating target system with username {RED}{USER}{RESET} and hash {RED}{HASH}{RESET}")
-            BLOODUH(DOMAIN, USER, HASH)
-            SMBUH(DOMAIN, USER, HASH)
-            LDAPUH(DOMAIN, USER, HASH)
-            WMIUH(DOMAIN, USER, HASH)
+            BLOODUH()
+            SMBUH()
+            LDAPUH()
+            WMIUH()
         else:
             print(f"{RED}Error: You need to provide either a username/password or a hash for enumeration!{RESET}")
             return  # Exit if no valid authentication method is provided
