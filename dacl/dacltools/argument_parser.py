@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 import sys
 
@@ -16,9 +14,10 @@ def parse_arguments():
     parser.add_argument("-R", "--GenericWrite", action="store_true", help="Generic Write Attack")
     parser.add_argument("-D", "--DCSync", action="store_true", help="DCSync Attack")
     parser.add_argument("-O", "--WriteOwner", action="store_true", help="Write Owner")
-    parser.add_argument("-d", "--DomainName", action="store", help="Domain Name", required=True)
-    
+    parser.add_argument("-C", "--AddCredentialLink", action="store_true", help="Add Credential Link")
+        
     # Modify these lines to make username and password optional when -E is used
+    parser.add_argument("-d", "--DomainName", action="store", help="Domain Name", required=True)
     parser.add_argument("-u", "--Username", action="store", help="Username")
     parser.add_argument("-p", "--Password", action="store", help="Password")
     
@@ -32,15 +31,10 @@ def parse_arguments():
         parser.print_help()
         sys.exit(1)  # Exit the program after showing help
     
-    # If not in enumerate mode, username and password are required
+    # If not in enumerate mode, username and password are required unless a hash is provided
     if not args.Enumerate:
-        if not args.Username or not args.Password:
+        if not args.Username or (not args.Password and not args.PassTheHash):
             parser.print_help()
             sys.exit(1)  # Exit after showing the help if required arguments are missing
     
     return args  # Return the parsed arguments
-
-# If you want to use this file standalone for debugging or testing
-if __name__ == '__main__':
-    args = parse_arguments()
-    print(args)
