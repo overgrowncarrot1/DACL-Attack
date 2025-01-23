@@ -24,7 +24,7 @@ USER = args.Username
 PASS = args.Password
 HASH = args.PassTheHash  
 
-def whois():
+def whois_GW():
     """Prompt user to choose between group (g) or user (u)"""
     who = input(f"{CYAN}Write owner over group or user (g/u):{RED} ").strip().lower()
     return who  # Return the input value
