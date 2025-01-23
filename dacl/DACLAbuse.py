@@ -16,12 +16,13 @@ from argument_parser import parse_arguments  # Import parse_arguments function
 from targetedkerb import Targ, HTarg
 from addmem import Ahash, Apass
 from WriteOwner import WOpassG, WOpassU, WOhashU, WOhashG, whois
-from WriteDACL import WriteDaclPass, WriteDaclHash, WriteDaclPassG, WriteDaclHashG, WriteDaclPassU, WriteDaclHashU
-from GenericAll import whois, GenericAllPass, GenericAllHash, GenericAllPassC, GenericAllHashC
+from dacltools.WriteDACL import (whois_dacl, WriteDaclPass, WriteDaclHash,
+    WriteDaclPassG, WriteDaclHashG, WriteDaclPassU, WriteDaclHashU)
+from GenericAll import whois_GA, GenericAllPass, GenericAllHash, GenericAllPassC, GenericAllHashC, GenericAllHashG, GenericAllPassG
 from ForceChange import ForceChangeH, ForceChangeP
 from Enumerate import BLOODUH, BLOODUP, SMBN, SMBUP, SMBUH, LDAPN, LDAPUP, LDAPUH, SSHUP, SSHUH, RDPUP, RDPUH, WMIN, WMIUP,WMIUH, VNCN, VNCUP, FTPN, FTPUP, NFSN, NFSUP, MSSQLUP, MSSQLUH, WINRMUP, WINRMUH
 from dcsync import DCHash, DCPass
-from GenericWrite import GWUP, GWGP, GWGH, GWUH
+from GenericWrite import whois_GW, GWUP, GWGP, GWGH, GWUH
 from AddCredentialLink import ACLH, ACLP
 
 # Set colorama color constants
@@ -58,11 +59,17 @@ def main():
     AddCredentialLink = args.AddCredentialLink
     
     if GenericWrite:
-        who_choice = whois()
+        who_choice = whois_GW()
         if HASH:
-            GWUH();GWGH()
+            if who_choice == 'g':
+                GWGH()
+            else:
+                GWUH()
         else:
-            GWUP();GWGP()
+            if who_choice == 'g':
+                GWGP()
+            else:
+                GWUP()
 
     if TargetedKerberoast:
         if HASH:
@@ -77,13 +84,30 @@ def main():
             Apass()  # Otherwise, call Apass
 
     if WriteDacl:
+        who_choice = whois_dacl()
+        if who_choice not in ['c', 'g', 'u']:
+            print(f"{RED}Invalid input! Please choose 'c' 'g' or 'u'.")
+            return 
         if HASH:
-            WriteDaclHash()
+            if who_choice == 'g':
+                WriteDaclHashG()
+            elif who_choice == 'u':
+                WriteDaclHashU()
+            else:
+                WriteDaclHash()
         else:
-            WriteDaclPass()  # Implement this function based on your needs
+            if who_choice == 'g':
+                WriteDaclPassG()  # Implement this function based on your needs
+            elif who_choice == 'u':
+                WriteDaclPassU()
+            else:
+                WriteDaclPass()
 
     if ForceChangePassword:
-        ForceChangePassword()  # Implement this function based on your needs
+        if HASH:
+            ForceChangeH()
+        else:
+            ForceChangeP()  # Implement this function based on your needs
 
     if WriteOwner:
         who_choice = whois()
@@ -100,24 +124,28 @@ def main():
     
     if GenericAll: 
         # Capture the input from whois function
-        who_choice = whois()  # Get user input and store it in a variable
+        who_choice = whois_GA()  # Get user input and store it in a variable
     
         # Check if the user input is valid
-        if who_choice not in ['c', 'u']:
-            print(f"{RED}Invalid input! Please choose 'g' or 'u'.")
+        if who_choice not in ['g', 'c', 'u']:
+            print(f"{RED}Invalid input! Please choose 'g' 'c' or 'u'.")
             return  # Exit the program if input is invalid
     
         # Execute the appropriate function based on the parsed arguments
         if HASH:
             if who_choice == "c":
                 GenericAllHashC()
-            else:
+            elif who_choice == "u":
                 GenericAllHash()
+            else:
+                GenericAllHashG()
         else:
             if who_choice == "c":
                 GenericAllPassC()
+            elif who_choice == "u":
+                GenericAllPass()
             else:
-                GenericAllPass()  
+                GenericAllPassG()
 
     if DCSync:
         if HASH:
